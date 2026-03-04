@@ -2,20 +2,18 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import { motion, AnimatePresence } from "framer-motion"
-import { ArrowRight, Download, Github, Linkedin, Mail, Phone, Code, Cpu, Zap, Users, Award, Calendar, GraduationCap } from 'lucide-react'
+import { ArrowRight, Download, Github, Linkedin, Mail, Phone, Code, Cpu, Zap, Users, Calendar, GraduationCap } from 'lucide-react'
 import { ShaderAnimation } from "@/components/ui/shader-animation"
-import DisplayCards, { type DisplayCardProps } from "@/components/ui/display-cards"
 import { HeroGeometric, HeroNameHeading } from "@/components/ui/shape-landing-hero"
+import { GlowingEffectDemo, SplineSceneBasic, TimelineDemo } from "@/components/ui/demo"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Badge } from "@/components/ui/badge"
 import { Progress } from "@/components/ui/progress"
 
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('home')
   const [introDone, setIntroDone] = useState(false)
   const [showIntroOverlay, setShowIntroOverlay] = useState(true)
-  const [selectedProject, setSelectedProject] = useState<"bayjo" | "beunec" | "hackathons">("bayjo")
 
   useEffect(() => {
     const introMainTimer = window.setTimeout(() => {
@@ -198,6 +196,16 @@ export default function Portfolio() {
           </div>
         </section>
 
+        {/* Immersive 3D spotlight */}
+        <section className="relative -mt-10 px-4 pb-24" aria-label="Interactive 3D hero">
+          <div className="container mx-auto">
+            <div className="relative">
+              <div className="absolute inset-0 -z-10 bg-gradient-to-r from-blue-500/10 via-slate-900/0 to-purple-500/10 blur-3xl" />
+              <SplineSceneBasic />
+            </div>
+          </div>
+        </section>
+
       {/* About Section */}
       <section id="about" className="relative -mt-16 py-20 px-4 z-[10]">
         <div className="absolute inset-0 bg-white/[0.02]" />
@@ -263,70 +271,8 @@ export default function Portfolio() {
       {/* Experience Section */}
       <section id="experience" className="relative -mt-16 py-20 px-4 z-[20]">
         <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.06] via-transparent to-rose-500/[0.06]" />
-        <div className="container mx-auto">
-          <h2 className="text-4xl font-bold text-white text-center mb-16">Professional Experience</h2>
-          <div className="space-y-8">
-            {/* Beunec */}
-            <Card className="bg-white/[0.03] border-white/10 backdrop-blur-sm">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-white text-xl">Nexlify Language Developer</CardTitle>
-                    <CardDescription className="text-blue-400 font-semibold">Beunec • Marlton, NJ</CardDescription>
-                  </div>
-                  <Badge className="bg-green-500/20 text-green-400 border-green-500/30">
-                    June 2025 – Present
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="text-slate-300 space-y-3">
-                <p>• Spearheading the design and development of ALUX, a custom JSX-style component programming language with AST-scoped CSS</p>
-                <p>• Engineered a full compiler pipeline with AST parsing, scoped CSS transformation, and virtual DOM generation</p>
-                <p>• Implemented Hot Module Reloading (HMR) via a custom @alux/hmr module inspired by Vite and React Fast Refresh</p>
-                <p>• Developed a modular runtime environment with component composition, scoped rendering, & live-reload testing</p>
-              </CardContent>
-            </Card>
-
-            {/* UIUC */}
-            <Card className="bg-white/[0.03] border-white/10 backdrop-blur-sm">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-white text-xl">Alumni Outreach</CardTitle>
-                    <CardDescription className="text-blue-400 font-semibold">Engineering Student Alumni Association, UIUC</CardDescription>
-                  </div>
-                  <Badge className="bg-blue-500/20 text-blue-400 border-blue-500/30">
-                    January 2025 – Present
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="text-slate-300 space-y-3">
-                <p>• Planned and hosted networking events, alumni panels, and outreach initiatives</p>
-                <p>• Facilitated connections to support professional growth and mentorship of students</p>
-                <p>• Promoted active alumni engagement within the engineering community</p>
-              </CardContent>
-            </Card>
-
-            {/* Repos Energy */}
-            <Card className="bg-white/[0.03] border-white/10 backdrop-blur-sm">
-              <CardHeader>
-                <div className="flex justify-between items-start">
-                  <div>
-                    <CardTitle className="text-white text-xl">Web Developer</CardTitle>
-                    <CardDescription className="text-blue-400 font-semibold">Repos Energy • Pune, India</CardDescription>
-                  </div>
-                  <Badge className="bg-purple-500/20 text-purple-400 border-purple-500/30">
-                    April 2023 - May 2023
-                  </Badge>
-                </div>
-              </CardHeader>
-              <CardContent className="text-slate-300 space-y-3">
-                <p>• Collaborated directly with founders to design and implement full-stack web applications using Django framework</p>
-                <p>• Gained hands-on experience across both frontend and backend development</p>
-                <p>• Worked in the Founder's Office to create the company's Investment Pitch Deck</p>
-              </CardContent>
-            </Card>
-          </div>
+        <div className="container relative mx-auto">
+          <TimelineDemo />
         </div>
       </section>
 
@@ -334,104 +280,16 @@ export default function Portfolio() {
       <section id="projects" className="relative -mt-16 py-20 px-4 z-[30]">
         <div className="absolute inset-0 bg-white/[0.02]" />
         <div className="container mx-auto">
-          <h2 className="text-4xl font-bold text-white text-center mb-16">Featured Projects</h2>
-          <div className="flex min-h-[420px] w-full items-center justify-center py-10">
-            <div className="w-full max-w-3xl">
-              <DisplayCards
-                cards={[
-                  {
-                    icon: <Zap className="size-4 text-blue-300" />,
-                    title: "Bayjo",
-                    description: "Campus food delivery startup",
-                    date: "Co-founder",
-                    iconClassName: "text-blue-500",
-                    titleClassName: "text-blue-400",
-                    className:
-                      "[grid-area:stack] hover:-translate-y-10 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
-                    onClick: () => setSelectedProject("bayjo"),
-                    active: selectedProject === "bayjo",
-                  } satisfies DisplayCardProps,
-                  {
-                    icon: <Code className="size-4 text-blue-300" />,
-                    title: "Beunec Intern",
-                    description: "ALUX language + compiler work",
-                    date: "Language Developer",
-                    iconClassName: "text-blue-500",
-                    titleClassName: "text-blue-400",
-                    className:
-                      "[grid-area:stack] translate-x-12 translate-y-10 hover:-translate-y-1 before:absolute before:w-[100%] before:outline-1 before:rounded-xl before:outline-border before:h-[100%] before:content-[''] before:bg-blend-overlay before:bg-background/50 grayscale-[100%] hover:before:opacity-0 before:transition-opacity before:duration-700 hover:grayscale-0 before:left-0 before:top-0",
-                    onClick: () => setSelectedProject("beunec"),
-                    active: selectedProject === "beunec",
-                  } satisfies DisplayCardProps,
-                  {
-                    icon: <Award className="size-4 text-blue-300" />,
-                    title: "Hackathons",
-                    description: "UIUC Pulse & HackIllinois 2026",
-                    date: "Competitive",
-                    iconClassName: "text-blue-500",
-                    titleClassName: "text-blue-400",
-                    className:
-                      "[grid-area:stack] translate-x-24 translate-y-20 hover:translate-y-10",
-                    onClick: () => setSelectedProject("hackathons"),
-                    active: selectedProject === "hackathons",
-                  } satisfies DisplayCardProps,
-                ]}
-              />
-            </div>
+          <div className="mx-auto max-w-3xl text-center">
+            <p className="text-sm uppercase tracking-[0.4em] text-white/50">Modular builds</p>
+            <h2 className="mt-4 text-4xl font-bold text-white">Glowing Project Capsules</h2>
+            <p className="mt-4 text-base text-slate-300">
+              Hover or tap on any capsule to open a floating tab that breaks down the full story—timeline, role, tech, and
+              battle-tested outcomes.
+            </p>
           </div>
-          <div className="max-w-4xl mx-auto mt-4 px-4">
-            {selectedProject === "bayjo" && (
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-5 backdrop-blur">
-                <h3 className="text-xl font-semibold text-white mb-2">Bayjo • Co‑Founder</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Co‑founder of startup Bayjo, a campus‑focused food delivery platform that connects college students with
-                  local home cooks offering fresh, affordable, and authentic home‑cooked meals. Built with the goal of
-                  bringing comfort and cultural connection through food, Bayjo empowers passionate cooks—students, parents,
-                  and community members alike—to share their culinary skills while earning income. Whether you're craving
-                  biryani between classes or a hearty lasagna for a late‑night study session, Bayjo delivers a taste of home,
-                  right to your dorm.
-                </p>
-              </div>
-            )}
-            {selectedProject === "beunec" && (
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-5 backdrop-blur space-y-3">
-                <h3 className="text-xl font-semibold text-white">Beunec • Nexlify Language Developer Intern</h3>
-                <p className="text-slate-200 leading-relaxed">
-                  Working as a language developer intern at Beunec on Nexlify and the ALUX programming language, a custom
-                  JSX‑style component language with AST‑scoped CSS and a full compiler pipeline. Focused on language design,
-                  compiler architecture, and tooling that makes modern component development faster and more expressive.
-                </p>
-                <ul className="list-disc list-inside text-slate-300 text-sm space-y-1">
-                  <li>Designed and implemented ALUX syntax and semantics for component composition.</li>
-                  <li>Built compiler stages including parsing, AST transforms, and scoped CSS generation.</li>
-                  <li>Contributed to hot‑reload tooling inspired by Vite and React Fast Refresh.</li>
-                </ul>
-              </div>
-            )}
-            {selectedProject === "hackathons" && (
-              <div className="rounded-2xl border border-white/10 bg-white/[0.03] px-6 py-5 backdrop-blur space-y-4">
-                <h3 className="text-xl font-semibold text-white">Hackathons • UIUC Pulse 2026 & HackIllinois 2026</h3>
-                <div className="space-y-3">
-                  <div>
-                    <h4 className="text-lg font-semibold text-indigo-200">UIUC Pulse 2026</h4>
-                    <p className="text-slate-200 leading-relaxed text-sm">
-                      Participated in UIUC Pulse 2026, collaborating with a cross‑disciplinary team to prototype a high‑impact
-                      campus experience project under tight time constraints. Focused on rapid ideation, UX, and full‑stack
-                      implementation while presenting to judges and mentors from industry and academia.
-                    </p>
-                  </div>
-                  <div className="h-px w-full bg-white/10" />
-                  <div>
-                    <h4 className="text-lg font-semibold text-indigo-200">HackIllinois 2026</h4>
-                    <p className="text-slate-200 leading-relaxed text-sm">
-                      Built and shipped a functional hack at HackIllinois 2026, integrating modern web technologies and
-                      cloud services to solve a real‑world problem. Worked end‑to‑end from architecture to UI, emphasizing
-                      performance, developer experience, and clean design under the 36‑hour hackathon deadline.
-                    </p>
-                  </div>
-                </div>
-              </div>
-            )}
+          <div className="mt-12">
+            <GlowingEffectDemo />
           </div>
         </div>
       </section>

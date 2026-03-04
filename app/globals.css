@@ -121,3 +121,50 @@
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  @keyframes spotlight-sweep {
+    0% {
+      opacity: 0;
+      transform: translate3d(-10%, -10%, 0) scale(0.9);
+    }
+    35% {
+      opacity: 0.85;
+      transform: translate3d(5%, -5%, 0) scale(1.05);
+    }
+    70% {
+      opacity: 0.35;
+      transform: translate3d(10%, 5%, 0) scale(1.1);
+    }
+    100% {
+      opacity: 0.9;
+      transform: translate3d(-8%, 12%, 0) scale(0.95);
+    }
+  }
+
+  .animate-spotlight {
+    animation: spotlight-sweep 14s ease-in-out infinite alternate;
+  }
+
+  @keyframes loader-spin {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+}
+
+@layer components {
+  .loader {
+    width: 3rem;
+    height: 3rem;
+    border-radius: 9999px;
+    border-width: 3px;
+    border-style: solid;
+    border-color: rgba(255, 255, 255, 0.15);
+    border-top-color: rgba(56, 189, 248, 0.95);
+    animation: loader-spin 0.9s linear infinite;
+  }
+}

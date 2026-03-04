@@ -1,0 +1,9 @@
+node_modules
+.next
+.turbo
+out
+dist
+.vercel
+tsconfig.tsbuildinfo
+*.log
+*.local
