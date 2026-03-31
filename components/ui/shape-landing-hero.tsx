@@ -1,5 +1,6 @@
 "use client"
 
+import type { ReactNode } from "react"
 import { motion, type Variants } from "framer-motion"
 import { Circle } from "lucide-react"
 
@@ -17,7 +18,7 @@ function HeroNameHeading({
   return (
     <h1
       className={cn(
-        "text-4xl sm:text-6xl md:text-8xl font-bold mb-6 md:mb-8 tracking-tight",
+        "text-3xl sm:text-5xl md:text-6xl font-bold mb-6 md:mb-8 tracking-tight",
         className
       )}
     >
@@ -25,7 +26,7 @@ function HeroNameHeading({
         {title1}
       </span>
       <br />
-      <span className="bg-clip-text text-transparent bg-gradient-to-r from-indigo-300 via-white/90 to-rose-300">
+      <span className="bg-clip-text text-transparent bg-gradient-to-r from-white/80 via-white/90 to-white/80">
         {title2}
       </span>
     </h1>
@@ -103,11 +104,13 @@ function HeroGeometric({
   title1 = "Elevate Your Digital Vision",
   title2 = "Crafting Exceptional Websites",
   subtitle = "Crafting exceptional digital experiences through innovative design and cutting-edge technology.",
+  backgroundSlot,
 }: {
   badge?: string
   title1?: string
   title2?: string
   subtitle?: string
+  backgroundSlot?: ReactNode
 }) {
   const fadeUpVariants: Variants = {
     hidden: { opacity: 0, y: 30 },
@@ -124,9 +127,9 @@ function HeroGeometric({
 
   return (
     <div className="relative min-h-screen w-full flex items-center justify-center overflow-hidden bg-[#030303]">
-      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl" />
+      <div className="absolute inset-0 bg-gradient-to-br from-indigo-500/[0.05] via-transparent to-rose-500/[0.05] blur-3xl pointer-events-none" />
 
-      <div className="absolute inset-0 overflow-hidden">
+      <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <ElegantShape
           delay={0.3}
           width={600}
@@ -159,7 +162,7 @@ function HeroGeometric({
           width={200}
           height={60}
           rotate={20}
-          gradient="from-amber-500/[0.15]"
+          gradient="from-sky-500/[0.15]"
           className="right-[15%] md:right-[20%] top-[10%] md:top-[15%]"
         />
 
@@ -173,7 +176,13 @@ function HeroGeometric({
         />
       </div>
 
-      <div className="relative z-10 container mx-auto px-4 md:px-6">
+      {backgroundSlot && (
+        <div className="absolute inset-0 z-[1]">
+          {backgroundSlot}
+        </div>
+      )}
+
+      <div className="relative z-10 container mx-auto px-4 md:px-6 pointer-events-none">
         <div className="max-w-3xl mx-auto text-center">
           <motion.div
             custom={0}
@@ -182,7 +191,7 @@ function HeroGeometric({
             animate="visible"
             className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-white/[0.03] border border-white/[0.08] mb-8 md:mb-12"
           >
-            <Circle className="h-2 w-2 fill-rose-500/80" />
+            <Circle className="h-2 w-2 fill-white/50" />
             <span className="text-sm text-white/60 tracking-wide">{badge}</span>
           </motion.div>
 
@@ -201,14 +210,14 @@ function HeroGeometric({
             initial="hidden"
             animate="visible"
           >
-            <p className="text-base sm:text-lg md:text-xl text-white/40 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
+            <p className="text-base sm:text-lg md:text-xl text-white/60 mb-8 leading-relaxed font-light tracking-wide max-w-xl mx-auto px-4">
               {subtitle}
             </p>
           </motion.div>
         </div>
       </div>
 
-      <div className="absolute inset-0 bg-gradient-to-t from-[#030303] via-transparent to-[#030303]/80 pointer-events-none" />
+      <div className="absolute inset-x-0 top-0 h-24 bg-gradient-to-b from-[#030303]/80 to-transparent pointer-events-none" />
     </div>
   )
 }

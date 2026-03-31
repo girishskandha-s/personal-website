@@ -1,7 +1,6 @@
 "use client"
 
 import { useState } from "react"
-import Image from "next/image"
 import { AnimatePresence, motion } from "framer-motion"
 import { SplineScene } from "@/components/ui/splite"
 import { Card } from "@/components/ui/card"
@@ -11,9 +10,10 @@ import { Badge } from "@/components/ui/badge"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { cn } from "@/lib/utils"
 import {
-  Calendar,
+  Briefcase,
   CheckCircle2,
   CircuitBoard,
+  ExternalLink,
   Globe,
   MapPin,
   Radio,
@@ -29,11 +29,16 @@ type ExperienceDetail = {
   company: string
   role: string
   location: string
-  timeframe: string
   summary: string
   achievements: string[]
-  images: { src: string; alt: string }[]
   icon: LucideIcon
+}
+
+type HackathonSubsection = {
+  name: string
+  award?: string
+  link?: { url: string; label: string }
+  bullets: string[]
 }
 
 type ProjectHighlight = {
@@ -45,20 +50,20 @@ type ProjectHighlight = {
   timeframe: string
   tech: string
   details: string[]
-  images: { src: string; alt: string }[]
   icon: LucideIcon
   area: string
+  subsections?: HackathonSubsection[]
 }
 
 const ExperienceBullet = ({ text }: { text: string }) => (
-  <div className="flex items-start gap-2 text-sm text-neutral-700 dark:text-neutral-200">
-    <CheckCircle2 className="mt-0.5 h-4 w-4 text-blue-500 dark:text-blue-300" />
+  <div className="flex items-start gap-2 text-sm text-white/70">
+    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-white/50" />
     <span>{text}</span>
   </div>
 )
 
 const ExperienceMeta = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) => (
-  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-neutral-600 dark:text-neutral-300">
+  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-white/50">
     <Icon className="h-3.5 w-3.5" />
     <span>{label}</span>
   </div>
@@ -66,10 +71,17 @@ const ExperienceMeta = ({ icon: Icon, label }: { icon: LucideIcon; label: string
 
 const experienceDetails: ExperienceDetail[] = [
   {
+    company: "IBM",
+    role: "Software Development (Planning) Intern",
+    location: "Bellevue, WA, USA",
+    summary: "Incoming Summer 2026",
+    achievements: [],
+    icon: Briefcase,
+  },
+  {
     company: "NASA L'SPACE NPWEE",
     role: "Project Manager & Software Developer",
     location: "Tempe, AZ, USA",
-    timeframe: "Aug 2025 – Dec 2025",
     summary:
       "Led a NASA-style proposal team to design an Autonomous Ultrasonic-Welding Robotic Attachment System for orbital repair missions.",
     achievements: [
@@ -77,23 +89,12 @@ const experienceDetails: ExperienceDetail[] = [
       "Developed the autonomy stack in Python/C++ with A*/RRT* motion planning, closed-loop control, and Gazebo/PyBullet simulations.",
       "Improved SDLC rigor to deliver 23% faster weld time, lower power draw, and greater spacecraft uptime.",
     ],
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?auto=format&fit=crop&w=900&q=80",
-        alt: "Satellite servicing concept",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=900&q=80",
-        alt: "Astronaut preparing robotic tools",
-      },
-    ],
     icon: Rocket,
   },
   {
     company: "Beunec",
     role: "Software Engineering – Compiler & Framework Systems",
     location: "Marlton, NJ, USA",
-    timeframe: "Jun 2025 – Oct 2025",
     summary:
       "Spearheaded a custom programming language and runtime that beat React by 28% in production rendering benchmarks.",
     achievements: [
@@ -101,39 +102,18 @@ const experienceDetails: ExperienceDetail[] = [
       "Built a C++ compiler pipeline with AST parsing, scoped CSS transforms, virtual DOM, runtime compiler, bundler, and CLI tools hitting 50 ms renders.",
       "Implemented Hot Module Reloading with a bespoke module inspired by Vite and React Fast Refresh.",
     ],
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
-        alt: "Compiler architecture sketches",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1517430816045-df4b7de11d1d?auto=format&fit=crop&w=900&q=80",
-        alt: "Developer working on multi-screen setup",
-      },
-    ],
     icon: CircuitBoard,
   },
   {
     company: "Repos Energy",
     role: "Full-Stack Web Developer",
     location: "Pune, MH, India",
-    timeframe: "Apr 2023 – May 2023",
     summary:
       "Delivered secure analytics dashboards and a real-time operations portal for the energy logistics team using Django and modern web stacks.",
     achievements: [
       "Developed a customer analytics dashboard and operations management portal with responsive, mobile-first UX.",
       "Integrated RESTful APIs with hardened authentication, improving backend response time by 15%.",
       "Collaborated with founders to align technical delivery with real-time operational insights.",
-    ],
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80",
-        alt: "Team reviewing analytics dashboards",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-        alt: "Responsive web application on tablet",
-      },
     ],
     icon: Globe,
   },
@@ -154,45 +134,43 @@ const projectHighlights: ProjectHighlight[] = [
       "Shipped modular cross-platform UI with Expo, tuned for low-latency updates and reliability.",
       "Architected Node.js services that keep the stack scalable while remaining student-maintained.",
     ],
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=900&q=80",
-        alt: "Home-cooked meal containers",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1470337458703-46ad1756a187?auto=format&fit=crop&w=900&q=80",
-        alt: "Delivery rider prepping bags",
-      },
-    ],
     icon: Utensils,
     area: "md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/6]",
   },
   {
     id: "hackathons",
     title: "Hackathons",
-    summary: "UIUC Pulse + HackIllinois builds focused on rapid impact prototypes.",
+    summary: "UIUC Pulse '26 + HackIllinois '26 — award-winning builds under pressure.",
     role: "Team Lead | Full-stack Rapid Prototyping",
     location: "Champaign, IL",
-    timeframe: "Feb 2026",
-    tech: "Next.js · Cloud Functions · Design Systems",
-    details: [
-      "Led cross-disciplinary squads through ideation, scoping, and final judging.",
-      "Built full-stack prototypes that integrated live campus data APIs within 36 hours.",
-      "Delivered polished storytelling decks and on-device demos for judges and sponsors.",
-      "Mentored first-time hackers on Git rituals, accessibility, and presentation polish.",
-    ],
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1520607162513-77705c0f0d4a?auto=format&fit=crop&w=900&q=80",
-        alt: "Hackathon team collaborating",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1518770660439-4636190af475?auto=format&fit=crop&w=900&q=80",
-        alt: "Code projected in dark room",
-      },
-    ],
+    timeframe: "Feb – Mar 2026",
+    tech: "Next.js · React · Modal · Gemini · Tailwind",
+    details: [],
     icon: Sparkles,
     area: "md:[grid-area:1/7/2/13] xl:[grid-area:1/6/2/13]",
+    subsections: [
+      {
+        name: "UIUC Pulse '26",
+        award: "1st Place — Advanced Track",
+        link: { url: "https://github.com/girishskandha-s/foodexpiry-ai", label: "View My Work" },
+        bullets: [
+          "Won 1st place in the advanced track at UIUC Pulse '26.",
+          "Built FreshTrack, an AI-powered grocery freshness tracker with receipt scanning and smart expiration tracking.",
+          "Integrated Google Gemini for AI abbreviation decoding, recipe generation, and fallback expiry estimation.",
+          "Shipped as a PWA with offline support, real-time dashboard, and 100+ USDA-sourced food shelf-life entries.",
+        ],
+      },
+      {
+        name: "HackIllinois '26",
+        link: { url: "https://devpost.com/software/a-e-g-i-s", label: "View My Work" },
+        bullets: [
+          "Built A.R.G.U.S., a multi-agent AI restaurant intelligence platform using fine-tuned CLIP vision and Llama 3.1 models on Modal A100 GPUs.",
+          "Engineered real-time person tracking with persistent IDs, motion-based standing detection, and table state classification.",
+          "Integrated Supermemory for continuous learning and Presage for guest biometrics and urgency scoring.",
+          "Deployed a live Next.js dashboard with floor view, urgency-ranked waitlist, and 60-second host recommendations.",
+        ],
+      },
+    ],
   },
   {
     id: "radio",
@@ -207,16 +185,6 @@ const projectHighlights: ProjectHighlight[] = [
       "Characterized gain, bandwidth, and filter performance across op-amp based stages.",
       "Designed local oscillator + mixer pair to reliably down-convert RF to IF.",
       "Documented modulation fidelity and troubleshooting steps for future lab cohorts.",
-    ],
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1505576399279-565b52d4ac71?auto=format&fit=crop&w=900&q=80",
-        alt: "RF lab equipment on bench",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=900&q=80",
-        alt: "Analog circuits close-up",
-      },
     ],
     icon: Radio,
     area: "md:[grid-area:2/1/3/8] xl:[grid-area:2/1/3/8]",
@@ -235,65 +203,34 @@ const projectHighlights: ProjectHighlight[] = [
       "Optimized gate-level logic for stability, observability, and lab-friendly debugging.",
       "Validated responsiveness with oscilloscopes, multimeters, and discrete instruments.",
     ],
-    images: [
-      {
-        src: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?auto=format&fit=crop&w=900&q=80",
-        alt: "Breadboard with LEDs",
-      },
-      {
-        src: "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=900&q=80",
-        alt: "Engineer adjusting analog circuit",
-      },
-    ],
     icon: Waves,
     area: "md:[grid-area:2/8/3/13] xl:[grid-area:2/8/3/13]",
   },
 ]
 
 export const experienceTimelineData: TimelineEntry[] = experienceDetails.map(
-  ({ company, role, location, timeframe, summary, achievements, images, icon: Icon }) => ({
+  ({ company, role, location, summary, achievements }) => ({
     title: company,
     content: (
-      <div className="rounded-3xl border border-neutral-100/60 bg-white/80 p-6 shadow-xl shadow-black/5 backdrop-blur dark:border-white/10 dark:bg-neutral-900/70">
+      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-xl shadow-black/10 backdrop-blur-sm">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <div className="flex items-center gap-3">
-            <Icon className="h-10 w-10 rounded-2xl bg-gradient-to-br from-blue-500/20 to-purple-500/30 p-2 text-purple-600 dark:text-purple-300" />
-            <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-neutral-500 dark:text-neutral-400">
-                Impact Focus
-              </p>
-              <div className="mt-3 flex flex-wrap gap-2">
-                <Badge className="bg-blue-500/10 text-blue-600 hover:bg-blue-500/20 dark:bg-blue-500/20 dark:text-blue-100">
-                  {role}
-                </Badge>
-              </div>
-            </div>
+          <Badge className="bg-white/10 text-white/80 hover:bg-white/15 w-fit">
+            {role}
+          </Badge>
+          <ExperienceMeta icon={MapPin} label={location} />
+        </div>
+        {summary && (
+          <p className="mt-6 text-sm leading-relaxed text-white/70 md:text-base">
+            {summary}
+          </p>
+        )}
+        {achievements.length > 0 && (
+          <div className="mt-6 space-y-3">
+            {achievements.map((achievement) => (
+              <ExperienceBullet key={achievement} text={achievement} />
+            ))}
           </div>
-          <div className="flex flex-col gap-2 text-right">
-            <ExperienceMeta icon={MapPin} label={location} />
-            <ExperienceMeta icon={Calendar} label={timeframe} />
-          </div>
-        </div>
-        <p className="mt-6 text-sm leading-relaxed text-neutral-700 dark:text-neutral-200 md:text-base">
-          {summary}
-        </p>
-        <div className="mt-6 space-y-3">
-          {achievements.map((achievement) => (
-            <ExperienceBullet key={achievement} text={achievement} />
-          ))}
-        </div>
-        <div className="mt-6 grid grid-cols-2 gap-4">
-          {images.map((image) => (
-            <Image
-              key={image.alt}
-              src={image.src}
-              alt={image.alt}
-              width={600}
-              height={400}
-              className="h-28 w-full rounded-2xl object-cover shadow-lg shadow-black/10 md:h-40"
-            />
-          ))}
-        </div>
+        )}
       </div>
     ),
   })
@@ -335,7 +272,6 @@ export function SplineSceneBasic() {
   return (
     <Card className="relative h-[520px] w-full overflow-hidden border-white/10 bg-gradient-to-br from-black via-[#04030f] to-[#050505]">
       <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill="#ffffff" />
-
       <div className="relative z-10 flex h-full flex-col gap-10 md:flex-row">
         <div className="flex flex-1 flex-col justify-center p-10">
           <p className="text-sm uppercase tracking-[0.4em] text-white/50">Immersive playground</p>
@@ -346,11 +282,7 @@ export function SplineSceneBasic() {
             </span>
           </h1>
           <p className="mt-4 text-lg text-white/80">
-            Bring your UI to life with beautiful 3D scenes powered by Spline. Blend cinematic lighting, real-time motion,
-            and tactile interactions into the rest of your blacked-out interface.
-          </p>
-          <p className="mt-6 text-sm font-semibold tracking-wide text-white/60">
-            Scene powered by Spline Runtime
+            Bring your UI to life with beautiful 3D scenes powered by Spline.
           </p>
         </div>
         <div className="flex flex-1 items-center justify-center bg-gradient-to-b from-white/5 to-transparent">
@@ -384,7 +316,7 @@ const ProjectOverlay = ({
           role="dialog"
           aria-modal="true"
           aria-label={`${project.title} details`}
-          className="relative mx-auto mt-16 w-[min(92vw,900px)] rounded-3xl border border-white/10 bg-[#060606]/95 p-8 text-white shadow-2xl"
+          className="relative mx-auto mt-16 max-h-[calc(100vh-6rem)] w-[min(92vw,900px)] overflow-y-auto rounded-3xl border border-white/10 bg-[#060606]/95 p-8 text-white shadow-2xl"
           initial={{ y: 48, opacity: 0, scale: 0.96 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: 48, opacity: 0, scale: 0.96 }}
@@ -401,7 +333,7 @@ const ProjectOverlay = ({
           </button>
           <div className="inline-flex items-center gap-3 rounded-t-3xl border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
             <span>{project.location}</span>
-            <span className="text-white/40">•</span>
+            <span className="text-white/40">&bull;</span>
             <span>{project.timeframe}</span>
           </div>
           <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
@@ -410,30 +342,55 @@ const ProjectOverlay = ({
               <p className="mt-2 text-sm text-white/70">{project.summary}</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Badge className="bg-blue-500/10 text-blue-200">{project.role}</Badge>
-              <Badge className="bg-purple-500/10 text-purple-200">{project.tech}</Badge>
+              <Badge className="bg-white/10 text-white/80">{project.role}</Badge>
+              <Badge className="bg-white/10 text-white/60">{project.tech}</Badge>
             </div>
           </div>
-          <div className="mt-6 grid gap-4 md:grid-cols-2">
-            {project.images.map((image) => (
-              <Image
-                key={image.alt}
-                src={image.src}
-                alt={image.alt}
-                width={600}
-                height={400}
-                className="h-40 w-full rounded-2xl object-cover shadow-lg shadow-black/40"
-              />
-            ))}
-          </div>
-          <div className="mt-6 space-y-3">
-            {project.details.map((detail) => (
-              <div key={detail} className="flex items-start gap-3 text-sm text-white/80">
-                <div className="mt-0.5 h-2 w-2 rounded-full bg-gradient-to-r from-blue-400 to-purple-400" />
-                <span>{detail}</span>
-              </div>
-            ))}
-          </div>
+
+          {project.subsections ? (
+            <div className="mt-8 space-y-8">
+              {project.subsections.map((sub) => (
+                <div key={sub.name}>
+                  <div className="flex flex-wrap items-center gap-3 mb-4">
+                    <h4 className="text-lg font-semibold text-white">{sub.name}</h4>
+                    {sub.award && (
+                      <Badge className="bg-white/10 text-white/80 border border-white/20">
+                        {sub.award}
+                      </Badge>
+                    )}
+                  </div>
+                  <div className="space-y-2.5">
+                    {sub.bullets.map((b) => (
+                      <div key={b} className="flex items-start gap-3 text-sm text-white/80">
+                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/40" />
+                        <span>{b}</span>
+                      </div>
+                    ))}
+                  </div>
+                  {sub.link && (
+                    <a
+                      href={sub.link.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors"
+                    >
+                      {sub.link.label}
+                      <ExternalLink className="h-3.5 w-3.5" />
+                    </a>
+                  )}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <div className="mt-6 space-y-3">
+              {project.details.map((detail) => (
+                <div key={detail} className="flex items-start gap-3 text-sm text-white/80">
+                  <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/40" />
+                  <span>{detail}</span>
+                </div>
+              ))}
+            </div>
+          )}
         </motion.div>
       </motion.div>
     )}
