@@ -8,6 +8,7 @@ import { Spotlight } from "@/components/ui/spotlight"
 import { Timeline, type TimelineEntry } from "@/components/ui/timeline"
 import { Badge } from "@/components/ui/badge"
 import { GlowingEffect } from "@/components/ui/glowing-effect"
+import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { cn } from "@/lib/utils"
 import {
   Briefcase,
@@ -52,18 +53,19 @@ type ProjectHighlight = {
   details: string[]
   icon: LucideIcon
   area: string
+  link?: { url: string; label: string }
   subsections?: HackathonSubsection[]
 }
 
 const ExperienceBullet = ({ text }: { text: string }) => (
   <div className="flex items-start gap-2 text-sm text-white/70">
-    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-white/50" />
+    <CheckCircle2 className="mt-0.5 h-4 w-4 shrink-0 text-steel-400/60" />
     <span>{text}</span>
   </div>
 )
 
 const ExperienceMeta = ({ icon: Icon, label }: { icon: LucideIcon; label: string }) => (
-  <div className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.25em] text-white/50">
+  <div className="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-white/50">
     <Icon className="h-3.5 w-3.5" />
     <span>{label}</span>
   </div>
@@ -136,6 +138,7 @@ const projectHighlights: ProjectHighlight[] = [
     ],
     icon: Utensils,
     area: "md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/6]",
+    link: { url: "https://apps.apple.com/us/app/bayjo/id6749600419", label: "View on App Store" },
   },
   {
     id: "hackathons",
@@ -162,7 +165,7 @@ const projectHighlights: ProjectHighlight[] = [
       },
       {
         name: "HackIllinois '26",
-        link: { url: "https://devpost.com/software/a-e-g-i-s", label: "View My Work" },
+        link: { url: "https://a-r-g-u-s.vercel.app/", label: "View My Work" },
         bullets: [
           "Built A.R.G.U.S., a multi-agent AI restaurant intelligence platform using fine-tuned CLIP vision and Llama 3.1 models on Modal A100 GPUs.",
           "Engineered real-time person tracking with persistent IDs, motion-based standing detection, and table state classification.",
@@ -212,9 +215,9 @@ export const experienceTimelineData: TimelineEntry[] = experienceDetails.map(
   ({ company, role, location, summary, achievements }) => ({
     title: company,
     content: (
-      <div className="rounded-3xl border border-white/10 bg-white/[0.03] p-6 shadow-xl shadow-black/10 backdrop-blur-sm">
+      <div className="rounded-3xl border border-white/10 bg-[#0a0a0a] p-6 will-change-transform">
         <div className="flex flex-col gap-4 md:flex-row md:items-center md:justify-between">
-          <Badge className="bg-white/10 text-white/80 hover:bg-white/15 w-fit">
+          <Badge className="bg-steel-500/10 text-steel-300/80 hover:bg-steel-500/15 border border-steel-500/15 w-fit">
             {role}
           </Badge>
           <ExperienceMeta icon={MapPin} label={location} />
@@ -270,14 +273,14 @@ export function GlowingEffectDemo() {
 
 export function SplineSceneBasic() {
   return (
-    <Card className="relative h-[520px] w-full overflow-hidden border-white/10 bg-gradient-to-br from-black via-[#04030f] to-[#050505]">
+    <Card className="relative h-[520px] w-full overflow-hidden border-white/10 bg-[#030303]">
       <Spotlight className="-top-40 left-0 md:-top-20 md:left-60" fill="#ffffff" />
       <div className="relative z-10 flex h-full flex-col gap-10 md:flex-row">
         <div className="flex flex-1 flex-col justify-center p-10">
-          <p className="text-sm uppercase tracking-[0.4em] text-white/50">Immersive playground</p>
-          <h1 className="mt-4 text-4xl font-bold text-white md:text-5xl">
+          <p className="font-mono text-xs uppercase tracking-widest text-white/50">Immersive playground</p>
+          <h1 className="font-display mt-4 text-4xl font-bold text-white md:text-5xl tracking-[-0.03em]">
             Interactive 3D
-            <span className="bg-gradient-to-r from-blue-400 via-sky-400 to-cyan-300 bg-clip-text text-transparent">
+            <span className="text-steel-400">
               {" "}Workbench
             </span>
           </h1>
@@ -285,7 +288,7 @@ export function SplineSceneBasic() {
             Bring your UI to life with beautiful 3D scenes powered by Spline.
           </p>
         </div>
-        <div className="flex flex-1 items-center justify-center bg-gradient-to-b from-white/5 to-transparent">
+        <div className="flex flex-1 items-center justify-center">
           <SplineScene
             scene="https://prod.spline.design/kZDDjO5HuC9GJUM2/scene.splinecode"
             className="h-full w-full"
@@ -306,7 +309,7 @@ const ProjectOverlay = ({
   <AnimatePresence>
     {project && (
       <motion.div
-        className="fixed inset-0 z-[70] bg-black/70 backdrop-blur-md"
+        className="fixed inset-0 z-[70] bg-black/80"
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         exit={{ opacity: 0 }}
@@ -316,7 +319,7 @@ const ProjectOverlay = ({
           role="dialog"
           aria-modal="true"
           aria-label={`${project.title} details`}
-          className="relative mx-auto mt-16 max-h-[calc(100vh-6rem)] w-[min(92vw,900px)] overflow-y-auto rounded-3xl border border-white/10 bg-[#060606]/95 p-8 text-white shadow-2xl"
+          className="relative mx-auto mt-16 max-h-[calc(100vh-6rem)] w-[min(92vw,900px)] overflow-y-auto rounded-3xl border border-white/10 bg-[#0a0a0a] p-8 text-white"
           initial={{ y: 48, opacity: 0, scale: 0.96 }}
           animate={{ y: 0, opacity: 1, scale: 1 }}
           exit={{ y: 48, opacity: 0, scale: 0.96 }}
@@ -331,19 +334,19 @@ const ProjectOverlay = ({
           >
             <X className="h-4 w-4" />
           </button>
-          <div className="inline-flex items-center gap-3 rounded-t-3xl border border-white/10 bg-white/5 px-5 py-2 text-xs font-semibold uppercase tracking-[0.35em] text-white/70">
+          <div className="inline-flex items-center gap-3 rounded-t-3xl border border-white/10 bg-white/5 px-5 py-2 font-mono text-xs uppercase tracking-widest text-white/70">
             <span>{project.location}</span>
             <span className="text-white/40">&bull;</span>
             <span>{project.timeframe}</span>
           </div>
           <div className="mt-6 flex flex-col gap-6 md:flex-row md:items-start md:justify-between">
             <div>
-              <h3 className="text-2xl font-semibold text-white">{project.title}</h3>
+              <h3 className="font-display text-2xl font-semibold text-white tracking-tight">{project.title}</h3>
               <p className="mt-2 text-sm text-white/70">{project.summary}</p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Badge className="bg-white/10 text-white/80">{project.role}</Badge>
-              <Badge className="bg-white/10 text-white/60">{project.tech}</Badge>
+              <Badge className="bg-steel-500/10 text-steel-300/80 border border-steel-500/15">{project.role}</Badge>
+              <Badge className="bg-white/5 text-white/60 border border-white/10">{project.tech}</Badge>
             </div>
           </div>
 
@@ -352,9 +355,9 @@ const ProjectOverlay = ({
               {project.subsections.map((sub) => (
                 <div key={sub.name}>
                   <div className="flex flex-wrap items-center gap-3 mb-4">
-                    <h4 className="text-lg font-semibold text-white">{sub.name}</h4>
+                    <h4 className="font-display text-lg font-semibold text-steel-300 tracking-tight">{sub.name}</h4>
                     {sub.award && (
-                      <Badge className="bg-white/10 text-white/80 border border-white/20">
+                      <Badge className="bg-rose-900/20 text-rose-400/70 border border-rose-800/25">
                         {sub.award}
                       </Badge>
                     )}
@@ -362,7 +365,7 @@ const ProjectOverlay = ({
                   <div className="space-y-2.5">
                     {sub.bullets.map((b) => (
                       <div key={b} className="flex items-start gap-3 text-sm text-white/80">
-                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/40" />
+                        <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-steel-400/50" />
                         <span>{b}</span>
                       </div>
                     ))}
@@ -372,7 +375,7 @@ const ProjectOverlay = ({
                       href={sub.link.url}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-white/70 hover:text-white transition-colors"
+                      className="mt-4 inline-flex items-center gap-2 text-sm font-medium transition-colors text-steel-400 hover:text-steel-300"
                     >
                       {sub.link.label}
                       <ExternalLink className="h-3.5 w-3.5" />
@@ -385,10 +388,21 @@ const ProjectOverlay = ({
             <div className="mt-6 space-y-3">
               {project.details.map((detail) => (
                 <div key={detail} className="flex items-start gap-3 text-sm text-white/80">
-                  <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-white/40" />
+                  <div className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full bg-steel-400/40" />
                   <span>{detail}</span>
                 </div>
               ))}
+              {project.link && (
+                <a
+                  href={project.link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-4 inline-flex items-center gap-2 text-sm font-medium text-steel-400 hover:text-steel-300 transition-colors"
+                >
+                  {project.link.label}
+                  <ExternalLink className="h-3.5 w-3.5" />
+                </a>
+              )}
             </div>
           )}
         </motion.div>
@@ -406,41 +420,43 @@ interface GridItemProps {
 }
 
 const GridItem = ({ area, icon: Icon, title, summary, onSelect }: GridItemProps) => (
-  <li className={cn("min-h-[14rem] list-none", area)}>
-    <button
-      type="button"
-      onClick={onSelect}
-      className="group relative block h-full w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-400/60"
-      aria-label={`Open details for ${title}`}
-    >
-      <div className="relative h-full rounded-[1.25rem] border-[0.75px] border-border p-2 md:rounded-[1.5rem] md:p-3">
-        <GlowingEffect
-          spread={40}
-          glow
-          disabled={false}
-          proximity={64}
-          inactiveZone={0.01}
-          borderWidth={3}
-        />
-        <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl border-[0.75px] bg-background/80 p-6 shadow-sm transition duration-300 group-hover:-translate-y-1 dark:shadow-[0px_0px_27px_0px_rgba(45,45,45,0.3)]">
-          <div className="relative flex flex-1 flex-col justify-between gap-3">
-            <div className="w-fit rounded-lg border-[0.75px] border-border bg-muted/60 p-2 text-white/70">
-              <Icon className="h-4 w-4" />
+  <ScrollReveal className={cn("min-h-[14rem] list-none", area)} delay={0.1}>
+    <li className="h-full list-none">
+      <button
+        type="button"
+        onClick={onSelect}
+        className="group relative block h-full w-full text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-steel-400/60"
+        aria-label={`Open details for ${title}`}
+      >
+        <div className="relative h-full rounded-[1.25rem] border-[0.75px] border-border p-2 md:rounded-[1.5rem] md:p-3">
+          <GlowingEffect
+            spread={40}
+            glow
+            disabled={false}
+            proximity={64}
+            inactiveZone={0.01}
+            borderWidth={3}
+          />
+          <div className="relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-xl border-[0.75px] bg-[#030303] p-6 transition duration-300 group-hover:-translate-y-1">
+            <div className="relative flex flex-1 flex-col justify-between gap-3">
+              <div className="w-fit rounded-lg border-[0.75px] border-border bg-[#111] p-2 text-white/70">
+                <Icon className="h-4 w-4" />
+              </div>
+              <div className="space-y-3">
+                <h3 className="pt-0.5 font-display text-xl font-semibold tracking-tight text-balance text-foreground md:text-2xl">
+                  {title}
+                </h3>
+                <p className="text-sm leading-[1.25rem] text-muted-foreground">
+                  {summary}
+                </p>
+              </div>
             </div>
-            <div className="space-y-3">
-              <h3 className="pt-0.5 font-sans text-xl font-semibold tracking-[-0.04em] text-balance text-foreground md:text-2xl">
-                {title}
-              </h3>
-              <p className="font-sans text-sm leading-[1.25rem] text-muted-foreground">
-                {summary}
-              </p>
-            </div>
+            <span className="font-mono text-xs uppercase tracking-widest text-steel-400/40">
+              Open tab
+            </span>
           </div>
-          <span className="text-xs font-semibold uppercase tracking-[0.4em] text-white/40">
-            Open tab
-          </span>
         </div>
-      </div>
-    </button>
-  </li>
+      </button>
+    </li>
+  </ScrollReveal>
 )
