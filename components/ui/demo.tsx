@@ -11,6 +11,7 @@ import { GlowingEffect } from "@/components/ui/glowing-effect"
 import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { cn } from "@/lib/utils"
 import {
+  Activity,
   Briefcase,
   CheckCircle2,
   CircuitBoard,
@@ -40,6 +41,7 @@ type HackathonSubsection = {
   award?: string
   link?: { url: string; label: string }
   bullets: string[]
+  image?: string
 }
 
 type ProjectHighlight = {
@@ -53,6 +55,7 @@ type ProjectHighlight = {
   details: string[]
   icon: LucideIcon
   area: string
+  image?: string
   link?: { url: string; label: string }
   subsections?: HackathonSubsection[]
 }
@@ -124,8 +127,8 @@ const experienceDetails: ExperienceDetail[] = [
 const projectHighlights: ProjectHighlight[] = [
   {
     id: "bayjo",
-    title: "Bayjo — Food Delivery App",
-    summary: "Campus-only delivery network for home-cooked meals at UIUC.",
+    title: "Bayjo - Food Delivery App",
+    summary: "Campus only delivery network for home-cooked meals at UIUC.",
     role: "Co-founder | React Native + Firebase",
     location: "Urbana, IL",
     timeframe: "Jun 2025 – Present",
@@ -138,23 +141,24 @@ const projectHighlights: ProjectHighlight[] = [
     ],
     icon: Utensils,
     area: "md:[grid-area:1/1/2/7] xl:[grid-area:1/1/2/6]",
+    image: "/bayjo-banner.png",
     link: { url: "https://apps.apple.com/us/app/bayjo/id6749600419", label: "View on App Store" },
   },
   {
     id: "hackathons",
     title: "Hackathons",
-    summary: "UIUC Pulse '26 + HackIllinois '26 — award-winning builds under pressure.",
+    summary: "UIUC Pulse '26 + HackIllinois '26 - award winning builds under pressure.",
     role: "Team Lead | Full-stack Rapid Prototyping",
     location: "Champaign, IL",
     timeframe: "Feb – Mar 2026",
-    tech: "Next.js · React · Modal · Gemini · Tailwind",
+    tech: "Next.js · React · Modal · Gemini · Tailwind · YOLOv8 · CLIP · Vision LLMs",
     details: [],
     icon: Sparkles,
     area: "md:[grid-area:1/7/2/13] xl:[grid-area:1/6/2/13]",
     subsections: [
       {
         name: "UIUC Pulse '26",
-        award: "1st Place — Advanced Track",
+        award: "1st Place - Advanced Track",
         link: { url: "https://github.com/girishskandha-s/foodexpiry-ai", label: "View My Work" },
         bullets: [
           "Won 1st place in the advanced track at UIUC Pulse '26.",
@@ -162,6 +166,7 @@ const projectHighlights: ProjectHighlight[] = [
           "Integrated Google Gemini for AI abbreviation decoding, recipe generation, and fallback expiry estimation.",
           "Shipped as a PWA with offline support, real-time dashboard, and 100+ USDA-sourced food shelf-life entries.",
         ],
+        image: "/freshtrack-pulse-demo.png",
       },
       {
         name: "HackIllinois '26",
@@ -172,8 +177,27 @@ const projectHighlights: ProjectHighlight[] = [
           "Integrated Supermemory for continuous learning and Presage for guest biometrics and urgency scoring.",
           "Deployed a live Next.js dashboard with floor view, urgency-ranked waitlist, and 60-second host recommendations.",
         ],
+        image: "/argus-demo.png",
       },
     ],
+  },
+  {
+    id: "event-monitoring",
+    title: "PulseGrid - Real Time Event Monitoring System",
+    summary: "Full-stack IoT event ingestion platform handling 5,000+ events/sec with live dashboards.",
+    role: "Software Engineering Project",
+    location: "Urbana, IL, USA",
+    timeframe: "November 2025",
+    tech: "Python · Node.js · React · WebSockets · PostgreSQL · AWS",
+    details: [
+      "Built a full-stack real-time device monitoring system and event ingestion website capable of handling 5,000+ events/sec from simulated IoT devices; reduced event processing latency by 63% using in-memory caching.",
+      "Implemented a streaming dashboard that visualizes live metrics and alerts; improved deployment speed by 40%.",
+      "Deployed containerized microservices on AWS (EC2, S3) with Dockerized services and GitHub Actions CI/CD.",
+    ],
+    icon: Activity,
+    area: "md:[grid-area:2/1/3/13] xl:[grid-area:2/1/3/13]",
+    image: "/pulsegrid-demo.png",
+    link: { url: "https://github.com/girishskandha-s/Event-monitoring-system", label: "View My Work" },
   },
   {
     id: "radio",
@@ -190,7 +214,7 @@ const projectHighlights: ProjectHighlight[] = [
       "Documented modulation fidelity and troubleshooting steps for future lab cohorts.",
     ],
     icon: Radio,
-    area: "md:[grid-area:2/1/3/8] xl:[grid-area:2/1/3/8]",
+    area: "md:[grid-area:3/1/4/8] xl:[grid-area:3/1/4/8]",
   },
   {
     id: "acoustic",
@@ -207,7 +231,7 @@ const projectHighlights: ProjectHighlight[] = [
       "Validated responsiveness with oscilloscopes, multimeters, and discrete instruments.",
     ],
     icon: Waves,
-    area: "md:[grid-area:2/8/3/13] xl:[grid-area:2/8/3/13]",
+    area: "md:[grid-area:3/8/4/13] xl:[grid-area:3/8/4/13]",
   },
 ]
 
@@ -254,7 +278,7 @@ export function GlowingEffectDemo() {
 
   return (
     <div className="relative">
-      <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-2 lg:gap-4 xl:max-h-[34rem]">
+      <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4">
         {projectHighlights.map((project) => (
           <GridItem
             key={project.id}
@@ -262,6 +286,7 @@ export function GlowingEffectDemo() {
             icon={project.icon}
             title={project.title}
             summary={project.summary}
+            image={project.image}
             onSelect={() => setActiveProject(project)}
           />
         ))}
@@ -381,6 +406,11 @@ const ProjectOverlay = ({
                       <ExternalLink className="h-3.5 w-3.5" />
                     </a>
                   )}
+                  {sub.image && (
+                    <div className="mt-4 overflow-hidden rounded-2xl border border-white/10">
+                      <img src={sub.image} alt={sub.name} className="w-full object-cover" />
+                    </div>
+                  )}
                 </div>
               ))}
             </div>
@@ -405,6 +435,12 @@ const ProjectOverlay = ({
               )}
             </div>
           )}
+
+          {project.image && (
+            <div className="mt-8 overflow-hidden rounded-2xl border border-white/10">
+              <img src={project.image} alt={project.title} className="w-full object-cover" />
+            </div>
+          )}
         </motion.div>
       </motion.div>
     )}
@@ -416,10 +452,11 @@ interface GridItemProps {
   icon: LucideIcon
   title: string
   summary: string
+  image?: string
   onSelect: () => void
 }
 
-const GridItem = ({ area, icon: Icon, title, summary, onSelect }: GridItemProps) => (
+const GridItem = ({ area, icon: Icon, title, summary, image, onSelect }: GridItemProps) => (
   <ScrollReveal className={cn("min-h-[14rem] list-none", area)} delay={0.1}>
     <li className="h-full list-none">
       <button

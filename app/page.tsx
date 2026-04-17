@@ -1,6 +1,7 @@
 "use client"
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { motion } from 'framer-motion'
 import { ArrowRight, Github, Linkedin, Mail, Phone, Cpu, Zap, Users, Calendar, GraduationCap } from 'lucide-react'
 import { HeroGeometric } from "@/components/ui/shape-landing-hero"
 import { GlowingEffectDemo, TimelineDemo } from "@/components/ui/demo"
@@ -10,6 +11,94 @@ import { ScrollReveal } from "@/components/ui/scroll-reveal"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 
+function NavBar({
+  sectionList,
+  activeSection,
+  onNavigate,
+}: {
+  sectionList: string[]
+  activeSection: string
+  onNavigate: (id: string) => void
+}) {
+  const navRef = useRef<HTMLDivElement>(null)
+  const buttonRefs = useRef<Map<string, HTMLButtonElement>>(new Map())
+  const [indicator, setIndicator] = useState({ left: 0, width: 0 })
+
+  const updateIndicator = useCallback(() => {
+    const btn = buttonRefs.current.get(activeSection)
+    const nav = navRef.current
+    if (!btn || !nav) return
+    const navRect = nav.getBoundingClientRect()
+    const btnRect = btn.getBoundingClientRect()
+    setIndicator({
+      left: btnRect.left - navRect.left,
+      width: btnRect.width,
+    })
+  }, [activeSection])
+
+  useEffect(() => {
+    updateIndicator()
+    window.addEventListener('resize', updateIndicator)
+    return () => window.removeEventListener('resize', updateIndicator)
+  }, [updateIndicator])
+
+  return (
+    <nav className="fixed top-0 w-full bg-[#0c0c0e]/95 z-50">
+      <div className="container mx-auto px-6 py-4">
+        <div className="flex items-center justify-between">
+          <div className="font-display text-2xl font-bold tracking-[0.15em] text-steel-400">
+            GSS
+          </div>
+          <div ref={navRef} className="hidden md:flex items-center space-x-8 relative">
+            {indicator.width > 0 && (
+              <motion.div
+                className="absolute pointer-events-none"
+                animate={{
+                  left: indicator.left,
+                  width: indicator.width,
+                }}
+                transition={{ type: 'spring', stiffness: 350, damping: 30 }}
+                style={{ top: -16 }}
+              >
+                {/* Top bar */}
+                <div className="mx-auto h-[3px] rounded-full bg-white/70" style={{ width: '70%' }} />
+                {/* Trapezoid beam */}
+                <div
+                  className="absolute top-[3px] left-[-50%] w-[200%]"
+                  style={{
+                    height: 48,
+                    clipPath: 'polygon(30% 0%, 70% 0%, 100% 100%, 0% 100%)',
+                    background: 'linear-gradient(to bottom, rgba(255,255,255,0.09), rgba(255,255,255,0.04) 50%, transparent)',
+                    filter: 'blur(1px)',
+                  }}
+                />
+                {/* Glow behind bar */}
+                <div className="absolute -top-1 left-1/2 -translate-x-1/2 h-4 rounded-full bg-white/15 blur-md" style={{ width: '45%' }} />
+              </motion.div>
+            )}
+            {sectionList.map((section) => (
+              <button
+                key={section}
+                ref={(el) => {
+                  if (el) buttonRefs.current.set(section, el)
+                }}
+                onClick={() => onNavigate(section)}
+                className={`capitalize text-sm font-medium transition-colors ${
+                  activeSection === section
+                    ? 'text-white'
+                    : 'text-white/40 hover:text-white/70'
+                }`}
+              >
+                {section}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+    </nav>
+  )
+}
+
 export default function Portfolio() {
   const [activeSection, setActiveSection] = useState('home')
 
@@ -17,6 +106,12 @@ export default function Portfolio() {
     const handleScroll = () => {
       const sections = ['home', 'about', 'experience', 'projects', 'education', 'contact']
       const scrollPosition = window.scrollY + 100
+
+      const atBottom = window.innerHeight + window.scrollY >= document.documentElement.scrollHeight - 100
+      if (atBottom) {
+        setActiveSection('contact')
+        return
+      }
 
       for (const section of sections) {
         const element = document.getElementById(section)
@@ -50,30 +145,11 @@ export default function Portfolio() {
 
   return (
     <InfiniteGridBackground>
-      <nav className="fixed top-0 w-full bg-[#0c0c0e]/95 z-50">
-        <div className="container mx-auto px-6 py-4">
-          <div className="flex items-center justify-between">
-            <div className="font-display text-2xl font-bold tracking-[0.15em] text-steel-400">
-              GSS
-            </div>
-            <div className="hidden md:flex items-center space-x-8">
-              {sectionList.map((section) => (
-                <button
-                  key={section}
-                  onClick={() => scrollToSection(section)}
-                  className={`capitalize text-sm font-medium transition-colors ${
-                    activeSection === section
-                      ? 'text-steel-400'
-                      : 'text-white/40 hover:text-white/70'
-                  }`}
-                >
-                  {section}
-                </button>
-              ))}
-            </div>
-          </div>
-        </div>
-      </nav>
+      <NavBar
+        sectionList={sectionList}
+        activeSection={activeSection}
+        onNavigate={scrollToSection}
+      />
 
       <div>
         <section id="home" className="relative overflow-hidden">
