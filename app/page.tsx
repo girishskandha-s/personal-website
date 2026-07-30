@@ -233,11 +233,11 @@ export default function Portfolio() {
                 </p>
                 <div className="grid grid-cols-2 gap-6">
                   <div className="text-center">
-                    <div className="font-display text-3xl font-bold text-steel-400 mb-2 tracking-tight">3.81</div>
+                    <div className="font-display text-3xl font-bold text-steel-400 mb-2 tracking-tight">3.82</div>
                     <div className="font-mono text-xs uppercase tracking-widest text-white/40">GPA</div>
                   </div>
                   <div className="text-center">
-                    <div className="font-display text-3xl font-bold text-steel-400 mb-2 tracking-tight">5+</div>
+                    <div className="font-display text-3xl font-bold text-steel-400 mb-2 tracking-tight">6+</div>
                     <div className="font-mono text-xs uppercase tracking-widest text-white/40">Projects</div>
                   </div>
                 </div>
@@ -325,7 +325,7 @@ export default function Portfolio() {
                         </div>
                       </div>
                       <div className="text-right">
-                        <div className="font-display text-2xl font-bold text-steel-400 tracking-tight">3.81/4.0</div>
+                        <div className="font-display text-2xl font-bold text-steel-400 tracking-tight">3.82/4.0</div>
                         <div className="font-mono text-xs uppercase tracking-widest text-white/40">GPA</div>
                       </div>
                     </div>
@@ -339,11 +339,13 @@ export default function Portfolio() {
                       <h4 className="font-display text-white font-semibold mb-3 tracking-tight">Relevant Coursework:</h4>
                       <div className="grid md:grid-cols-2 gap-3">
                         {[
-                          'Digital Logic & Systems',
-                          'Computer Architecture',
+                          'Data Structures & Algorithms',
                           'Systems Programming',
-                          'Electrical Systems',
+                          'Computer Architecture',
+                          'Discrete Structures',
+                          'Digital Logic & Systems',
                           'Embedded Programming',
+                          'Electrical Systems',
                           'Circuit Analysis'
                         ].map((course) => (
                           <div key={course} className="flex items-center text-white/55 text-sm">

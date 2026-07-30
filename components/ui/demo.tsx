@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { AnimatePresence, motion } from "framer-motion"
 import { SplineScene } from "@/components/ui/splite"
 import { Card } from "@/components/ui/card"
@@ -15,6 +15,7 @@ import {
   Briefcase,
   CheckCircle2,
   CircuitBoard,
+  Cpu,
   ExternalLink,
   Globe,
   MapPin,
@@ -79,8 +80,13 @@ const experienceDetails: ExperienceDetail[] = [
     company: "IBM",
     role: "Software Development (Planning) Intern",
     location: "Bellevue, WA, USA",
-    summary: "Incoming Summer 2026",
-    achievements: [],
+    summary:
+      "Shipping scalable full-stack features for IBM Apptio using React, TypeScript, Python, and PostgreSQL.",
+    achievements: [
+      "Delivering production-ready functionality that enhances platform performance and user experience.",
+      "Optimizing responsive UI components and backend services while adding unit tests and contributing to CI/CD pipelines, accelerating feature delivery in an Agile environment.",
+      "Resolving customer-reported issues through root-cause analysis and debugging, improving reliability and ensuring seamless integration across cloud-based systems.",
+    ],
     icon: Briefcase,
   },
   {
@@ -147,11 +153,11 @@ const projectHighlights: ProjectHighlight[] = [
   {
     id: "hackathons",
     title: "Hackathons",
-    summary: "UIUC Pulse '26 + HackIllinois '26 - award winning builds under pressure.",
+    summary: "UIUC Pulse '26 + HackIllinois '26 + CalHacks AI '26 - award winning builds under pressure.",
     role: "Team Lead | Full-stack Rapid Prototyping",
-    location: "Champaign, IL",
-    timeframe: "Feb – Mar 2026",
-    tech: "Next.js · React · Modal · Gemini · Tailwind · YOLOv8 · CLIP · Vision LLMs",
+    location: "Champaign, IL & Berkeley, CA",
+    timeframe: "Feb – Jun 2026",
+    tech: "Next.js · React · Modal · Gemini · Tailwind · YOLOv8 · CLIP · Vision LLMs · Deepgram · Twilio · Redis",
     details: [],
     icon: Sparkles,
     area: "md:[grid-area:1/7/2/13] xl:[grid-area:1/6/2/13]",
@@ -179,6 +185,16 @@ const projectHighlights: ProjectHighlight[] = [
         ],
         image: "/argus-demo.png",
       },
+      {
+        name: "CalHacks AI Hackathon '26",
+        link: { url: "https://devpost.com/software/loop-7tnj5g", label: "View My Work" },
+        bullets: [
+          "Built Loop, a real-time scam-call protection app for seniors that screens calls from non-whitelisted numbers for red flags like urgency and requests for money.",
+          "Streamed both sides of live calls into Deepgram's nova-3 model with multi-language support and 100 ms endpointing to catch scams as they happen.",
+          "Ran Redis vector KNN search against known scam patterns and a caller-fingerprint database to flag repeat offenders across the userbase.",
+          "Integrated Twilio call forwarding with configurable escalation - from on-call warnings to letting a trusted adult join or terminate the call.",
+        ],
+      },
     ],
   },
   {
@@ -195,7 +211,7 @@ const projectHighlights: ProjectHighlight[] = [
       "Deployed containerized microservices on AWS (EC2, S3) with Dockerized services and GitHub Actions CI/CD.",
     ],
     icon: Activity,
-    area: "md:[grid-area:2/1/3/13] xl:[grid-area:2/1/3/13]",
+    area: "md:[grid-area:2/1/3/7] xl:[grid-area:2/1/3/7]",
     image: "/pulsegrid-demo.png",
     link: { url: "https://github.com/girishskandha-s/Event-monitoring-system", label: "View My Work" },
   },
@@ -215,6 +231,22 @@ const projectHighlights: ProjectHighlight[] = [
     ],
     icon: Radio,
     area: "md:[grid-area:3/1/4/8] xl:[grid-area:3/1/4/8]",
+  },
+  {
+    id: "macintosh",
+    title: "Project Macintosh - Apple Macintosh Recreation",
+    summary: "FPGA-based Macintosh recreation booting legacy System 6/7 firmware with GUI and input.",
+    role: "Embedded Software Engineering Project",
+    location: "Urbana, IL, USA",
+    timeframe: "March 2026",
+    tech: "C++ · SystemVerilog · Xilinx Vivado/Vitis · FPGA · MicroBlaze",
+    details: [
+      "Recreated the Apple Macintosh OS experience by implementing a Motorola 68000 CPU core in SystemVerilog with ROM/BRAM boot support, enabling execution of legacy System 6/7 firmware.",
+      "Designed modular system interfaces for memory, peripherals, and I/O communication, creating a scalable architecture for OS-level interaction and debugging.",
+      "Delivered an embedded Macintosh recreation capable of booting legacy firmware with full GUI rendering and input handling.",
+    ],
+    icon: Cpu,
+    area: "md:[grid-area:2/7/3/13] xl:[grid-area:2/7/3/13]",
   },
   {
     id: "acoustic",
@@ -278,7 +310,7 @@ export function GlowingEffectDemo() {
 
   return (
     <div className="relative">
-      <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 md:grid-rows-3 lg:gap-4">
+      <ul className="grid grid-cols-1 grid-rows-none gap-4 md:grid-cols-12 lg:gap-4">
         {projectHighlights.map((project) => (
           <GridItem
             key={project.id}
@@ -330,7 +362,22 @@ const ProjectOverlay = ({
 }: {
   project: ProjectHighlight | null
   onClose: () => void
-}) => (
+}) => {
+  useEffect(() => {
+    if (!project) return
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") onClose()
+    }
+    window.addEventListener("keydown", handleKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      window.removeEventListener("keydown", handleKeyDown)
+    }
+  }, [project, onClose])
+
+  return (
   <AnimatePresence>
     {project && (
       <motion.div
@@ -445,7 +492,8 @@ const ProjectOverlay = ({
       </motion.div>
     )}
   </AnimatePresence>
-)
+  )
+}
 
 interface GridItemProps {
   area: string
